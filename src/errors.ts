@@ -8,12 +8,16 @@ export class AIHookError extends Error {
       this.code = code;
       this.provider = provider;
       this.suggestion = suggestion;
+      // Do NOT print pretty message in constructor
     }
   
     pretty() {
-      console.error(`\n❌ AI-HOOK ERROR: ${this.message}`);
-      if (this.provider) console.error(`   Provider: ${this.provider}`);
-      if (this.suggestion) console.error(`   Suggestion: ${this.suggestion}\n`);
+      return `\n❌ AI-HOOK ERROR: ${this.message}` +
+        (this.provider ? `\n   Provider: ${this.provider}` : "") +
+        (this.suggestion ? `\n   Suggestion: ${this.suggestion}\n` : "");
+    }
+
+    toString() {
+      return this.pretty();
     }
   }
-  

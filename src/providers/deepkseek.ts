@@ -1,17 +1,17 @@
 import axios from "axios";
 import { AIHookError } from "../errors";
-import { OpenAIModel } from "../types/openai";
+import { DeepSeekModel } from "../types/deepseek";
 
-const BASE_URL = "https://api.openai.com/v1";
+const BASE_URL = "https://api.deepseek.com/v1";
 
-export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<string> {
-  const apiKey = process.env.AI_HOOK_OPENAI_KEY;
+export async function callDeepSeek(prompt: string, model: DeepSeekModel): Promise<string> {
+  const apiKey = process.env.AI_HOOK_DEEPSEEK_KEY;
   if (!apiKey) {
     throw new AIHookError(
       "INVALID_API_KEY",
-      "Missing OpenAI API key.",
-      "openai",
-      "Set AI_HOOK_OPENAI_KEY in your environment variables."
+      "Missing DeepSeek API key.",
+      "deepseek",
+      "Set AI_HOOK_DEEPSEEK_KEY in your environment variables."
     );
   }
 
@@ -39,8 +39,8 @@ export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<st
     if (!output) {
       throw new AIHookError(
         "PROVIDER_ERROR",
-        "OpenAI returned empty response",
-        "openai",
+        "DeepSeek returned empty response",
+        "deepseek",
         "Check your model and API key"
       );
     }
@@ -56,42 +56,42 @@ export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<st
       if (status === 400)
         throw new AIHookError(
           "BAD_REQUEST",
-          `OpenAI rejected the request: ${text}`,
-          "openai",
+          `DeepSeek rejected the request: ${text}`,
+          "deepseek",
           "Check your prompt and model"
         );
       if (status === 401)
         throw new AIHookError(
           "INVALID_API_KEY",
-          `Invalid OpenAI API key: ${text}`,
-          "openai",
-          "Verify your AI_HOOK_OPENAI_KEY environment variable"
+          `Invalid DeepSeek API key: ${text}`,
+          "deepseek",
+          "Verify your AI_HOOK_DEEPSEEK_KEY environment variable"
         );
       if (status === 429)
         throw new AIHookError(
           "RATE_LIMIT",
-          `Too many requests to OpenAI: ${text}`,
-          "openai",
+          `Too many requests to DeepSeek: ${text}`,
+          "deepseek",
           "Throttle requests or upgrade your plan"
         );
 
       throw new AIHookError(
         "PROVIDER_ERROR",
-        `OpenAI API error: ${text}`,
-        "openai"
+        `DeepSeek API error: ${text}`,
+        "deepseek"
       );
     } else if (err.request) {
       throw new AIHookError(
         "NETWORK_ERROR",
-        "Network error while contacting OpenAI",
-        "openai",
+        "Network error while contacting DeepSeek",
+        "deepseek",
         "Check your internet connection"
       );
     } else {
       throw new AIHookError(
         "UNKNOWN_ERROR",
         err.message,
-        "openai"
+        "deepseek"
       );
     }
   }

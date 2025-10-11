@@ -1,25 +1,27 @@
 import axios from "axios";
 import { AIHookError } from "../errors";
-import { OpenAIModel } from "../types/openai";
+import { ClaudeModel } from "../types/claude";
 
-const BASE_URL = "https://api.openai.com/v1";
+const BASE_URL = "https://api.anthropic.com/v1";
+const ANTHROPIC_VERSION = "2023-06-01";
 
-export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<string> {
-  const apiKey = process.env.AI_HOOK_OPENAI_KEY;
+export async function callClaude(prompt: string, model: ClaudeModel): Promise<string> {
+  const apiKey = process.env.AI_HOOK_CLAUDE_KEY;
   if (!apiKey) {
     throw new AIHookError(
       "INVALID_API_KEY",
-      "Missing OpenAI API key.",
-      "openai",
-      "Set AI_HOOK_OPENAI_KEY in your environment variables."
+      "Missing Claude API key.",
+      "claude",
+      "Set AI_HOOK_CLAUDE_KEY in your environment variables."
     );
   }
 
   try {
     const response = await axios.post(
-      `${BASE_URL}/chat/completions`,
+      `${BASE_URL}/messages`,
       {
         model,
+        max_tokens: 4096,
         messages: [
           {
             role: "user",
@@ -29,18 +31,19 @@ export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<st
       },
       {
         headers: {
-          "Authorization": `Bearer ${apiKey}`,
+          "x-api-key": apiKey,
+          "anthropic-version": ANTHROPIC_VERSION,
           "Content-Type": "application/json"
         }
       }
     );
 
-    const output = response.data?.choices?.[0]?.message?.content;
+    const output = response.data?.content?.[0]?.text;
     if (!output) {
       throw new AIHookError(
         "PROVIDER_ERROR",
-        "OpenAI returned empty response",
-        "openai",
+        "Claude returned empty response",
+        "claude",
         "Check your model and API key"
       );
     }
@@ -56,42 +59,42 @@ export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<st
       if (status === 400)
         throw new AIHookError(
           "BAD_REQUEST",
-          `OpenAI rejected the request: ${text}`,
-          "openai",
+          `Claude rejected the request: ${text}`,
+          "claude",
           "Check your prompt and model"
         );
       if (status === 401)
         throw new AIHookError(
           "INVALID_API_KEY",
-          `Invalid OpenAI API key: ${text}`,
-          "openai",
-          "Verify your AI_HOOK_OPENAI_KEY environment variable"
+          `Invalid Claude API key: ${text}`,
+          "claude",
+          "Verify your AI_HOOK_CLAUDE_KEY environment variable"
         );
       if (status === 429)
         throw new AIHookError(
           "RATE_LIMIT",
-          `Too many requests to OpenAI: ${text}`,
-          "openai",
+          `Too many requests to Claude: ${text}`,
+          "claude",
           "Throttle requests or upgrade your plan"
         );
 
       throw new AIHookError(
         "PROVIDER_ERROR",
-        `OpenAI API error: ${text}`,
-        "openai"
+        `Claude API error: ${text}`,
+        "claude"
       );
     } else if (err.request) {
       throw new AIHookError(
         "NETWORK_ERROR",
-        "Network error while contacting OpenAI",
-        "openai",
+        "Network error while contacting Claude",
+        "claude",
         "Check your internet connection"
       );
     } else {
       throw new AIHookError(
         "UNKNOWN_ERROR",
         err.message,
-        "openai"
+        "claude"
       );
     }
   }

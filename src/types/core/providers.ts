@@ -1,13 +1,18 @@
-import { Provider, ProviderModels } from "../index"; 
+import { Provider, ProviderModels } from "../index";
 
 export interface ProviderFunction<P extends Provider = Provider> {
   (prompt: string, model: ProviderModels[P]): Promise<string>;
 }
 
 export interface ProviderMap {
-    openai: ProviderFunction<"openai">;
-    openrouter: ProviderFunction<"openrouter">;
-    groq: ProviderFunction<"groq">;
-    mock: ProviderFunction<any>; // generic fallback for mock
-  }
-  
+  openrouter: ProviderFunction<"openrouter">;
+  groq: ProviderFunction<"groq">;
+  openai: ProviderFunction<"openai">;
+  gemini: ProviderFunction<"gemini">;
+  claude: ProviderFunction<"claude">;
+  deepseek: ProviderFunction<"deepseek">;
+  xai: ProviderFunction<"xai">;
+  perplexity: ProviderFunction<"perplexity">;
+  mistral: ProviderFunction<"mistral">;
+  mock: ProviderFunction<any>; // generic fallback for mock
+}

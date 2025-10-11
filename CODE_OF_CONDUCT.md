@@ -1,8 +1,3 @@
-
----
-
-## 3. `CODE_OF_CONDUCT.md`
-
 ```md
 # Contributor Covenant Code of Conduct
 

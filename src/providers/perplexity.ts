@@ -1,17 +1,17 @@
 import axios from "axios";
 import { AIHookError } from "../errors";
-import { OpenAIModel } from "../types/openai";
+import { PerplexityModel } from "../types/perplexity";
 
-const BASE_URL = "https://api.openai.com/v1";
+const BASE_URL = "https://api.perplexity.ai";
 
-export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<string> {
-  const apiKey = process.env.AI_HOOK_OPENAI_KEY;
+export async function callPerplexity(prompt: string, model: PerplexityModel): Promise<string> {
+  const apiKey = process.env.AI_HOOK_PERPLEXITY_KEY;
   if (!apiKey) {
     throw new AIHookError(
       "INVALID_API_KEY",
-      "Missing OpenAI API key.",
-      "openai",
-      "Set AI_HOOK_OPENAI_KEY in your environment variables."
+      "Missing Perplexity API key.",
+      "perplexity",
+      "Set AI_HOOK_PERPLEXITY_KEY in your environment variables."
     );
   }
 
@@ -39,8 +39,8 @@ export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<st
     if (!output) {
       throw new AIHookError(
         "PROVIDER_ERROR",
-        "OpenAI returned empty response",
-        "openai",
+        "Perplexity returned empty response",
+        "perplexity",
         "Check your model and API key"
       );
     }
@@ -56,42 +56,42 @@ export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<st
       if (status === 400)
         throw new AIHookError(
           "BAD_REQUEST",
-          `OpenAI rejected the request: ${text}`,
-          "openai",
+          `Perplexity rejected the request: ${text}`,
+          "perplexity",
           "Check your prompt and model"
         );
       if (status === 401)
         throw new AIHookError(
           "INVALID_API_KEY",
-          `Invalid OpenAI API key: ${text}`,
-          "openai",
-          "Verify your AI_HOOK_OPENAI_KEY environment variable"
+          `Invalid Perplexity API key: ${text}`,
+          "perplexity",
+          "Verify your AI_HOOK_PERPLEXITY_KEY environment variable"
         );
       if (status === 429)
         throw new AIHookError(
           "RATE_LIMIT",
-          `Too many requests to OpenAI: ${text}`,
-          "openai",
+          `Too many requests to Perplexity: ${text}`,
+          "perplexity",
           "Throttle requests or upgrade your plan"
         );
 
       throw new AIHookError(
         "PROVIDER_ERROR",
-        `OpenAI API error: ${text}`,
-        "openai"
+        `Perplexity API error: ${text}`,
+        "perplexity"
       );
     } else if (err.request) {
       throw new AIHookError(
         "NETWORK_ERROR",
-        "Network error while contacting OpenAI",
-        "openai",
+        "Network error while contacting Perplexity",
+        "perplexity",
         "Check your internet connection"
       );
     } else {
       throw new AIHookError(
         "UNKNOWN_ERROR",
         err.message,
-        "openai"
+        "perplexity"
       );
     }
   }

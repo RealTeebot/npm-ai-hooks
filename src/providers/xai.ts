@@ -1,17 +1,17 @@
 import axios from "axios";
 import { AIHookError } from "../errors";
-import { OpenAIModel } from "../types/openai";
+import { XAIModel } from "../types/xai";
 
-const BASE_URL = "https://api.openai.com/v1";
+const BASE_URL = "https://api.x.ai/v1";
 
-export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<string> {
-  const apiKey = process.env.AI_HOOK_OPENAI_KEY;
+export async function callXAI(prompt: string, model: XAIModel): Promise<string> {
+  const apiKey = process.env.AI_HOOK_XAI_KEY;
   if (!apiKey) {
     throw new AIHookError(
       "INVALID_API_KEY",
-      "Missing OpenAI API key.",
-      "openai",
-      "Set AI_HOOK_OPENAI_KEY in your environment variables."
+      "Missing xAI API key.",
+      "xai",
+      "Set AI_HOOK_XAI_KEY in your environment variables."
     );
   }
 
@@ -39,8 +39,8 @@ export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<st
     if (!output) {
       throw new AIHookError(
         "PROVIDER_ERROR",
-        "OpenAI returned empty response",
-        "openai",
+        "xAI returned empty response",
+        "xai",
         "Check your model and API key"
       );
     }
@@ -56,42 +56,42 @@ export async function callOpenAI(prompt: string, model: OpenAIModel): Promise<st
       if (status === 400)
         throw new AIHookError(
           "BAD_REQUEST",
-          `OpenAI rejected the request: ${text}`,
-          "openai",
+          `xAI rejected the request: ${text}`,
+          "xai",
           "Check your prompt and model"
         );
       if (status === 401)
         throw new AIHookError(
           "INVALID_API_KEY",
-          `Invalid OpenAI API key: ${text}`,
-          "openai",
-          "Verify your AI_HOOK_OPENAI_KEY environment variable"
+          `Invalid xAI API key: ${text}`,
+          "xai",
+          "Verify your AI_HOOK_XAI_KEY environment variable"
         );
       if (status === 429)
         throw new AIHookError(
           "RATE_LIMIT",
-          `Too many requests to OpenAI: ${text}`,
-          "openai",
+          `Too many requests to xAI: ${text}`,
+          "xai",
           "Throttle requests or upgrade your plan"
         );
 
       throw new AIHookError(
         "PROVIDER_ERROR",
-        `OpenAI API error: ${text}`,
-        "openai"
+        `xAI API error: ${text}`,
+        "xai"
       );
     } else if (err.request) {
       throw new AIHookError(
         "NETWORK_ERROR",
-        "Network error while contacting OpenAI",
-        "openai",
+        "Network error while contacting xAI",
+        "xai",
         "Check your internet connection"
       );
     } else {
       throw new AIHookError(
         "UNKNOWN_ERROR",
         err.message,
-        "openai"
+        "xai"
       );
     }
   }

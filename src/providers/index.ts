@@ -1,14 +1,26 @@
 import { AIHookError } from "../errors";
-import { callOpenAI } from "./openai";
-import { callOpenRouter } from "./openrouter";
-import { callGroq } from "./groq";
 import { Provider } from "../types";
 import { ProviderFunction, ProviderMap } from "../types/core/providers";
+import { callOpenRouter } from "./openrouter";
+import { callGroq } from "./groq";
+import { callOpenAI } from "./openai";
+import { callGemini } from "./gemini";
+import { callClaude } from "./claude";
+import { callDeepSeek } from "./deepkseek";
+import { callXAI } from "./xai";
+import { callPerplexity } from "./perplexity";
+import { callMistral } from "./mistral";
 
 const providers: ProviderMap = {
-    openai: callOpenAI,
     openrouter: callOpenRouter,
     groq: callGroq,
+    openai: callOpenAI,
+    gemini: callGemini,
+    claude: callClaude,
+    deepseek: callDeepSeek,
+    xai: callXAI,
+    perplexity: callPerplexity,
+    mistral: callMistral,
     mock: async (prompt: string, model?: string) => `[MOCK OUTPUT] ${prompt}`
 };
 
@@ -25,6 +37,24 @@ export function getAvailableProviders(): Provider[] {
     }
     if (process.env.AI_HOOK_OPENAI_KEY && !available.includes("openai")) {
         available.push("openai");
+    }
+    if (process.env.AI_HOOK_GEMINI_KEY && !available.includes("gemini")) {
+        available.push("gemini");
+    }
+    if (process.env.AI_HOOK_CLAUDE_KEY && !available.includes("claude")) {
+        available.push("claude");
+    }
+    if (process.env.AI_HOOK_DEEPSEEK_KEY && !available.includes("deepseek")) {
+        available.push("deepseek");
+    }
+    if (process.env.AI_HOOK_XAI_KEY && !available.includes("xai")) {
+        available.push("xai");
+    }
+    if (process.env.AI_HOOK_PERPLEXITY_KEY && !available.includes("perplexity")) {
+        available.push("perplexity");
+    }
+    if (process.env.AI_HOOK_MISTRAL_KEY && !available.includes("mistral")) {
+        available.push("mistral");
     }
     return available;
 }

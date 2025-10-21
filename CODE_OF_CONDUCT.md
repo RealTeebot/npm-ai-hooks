@@ -24,7 +24,7 @@ Examples of unacceptable behavior include:
 
 ## Enforcement
 
-Instances of abusive behavior may be reported to the maintainers via [issues](https://github.com/RealTeebot/npm-ai-hooks/issues).  
+Instances of abusive behavior may be reported to the maintainers via [issues](https://github.com/iTeebot/npm-ai-hooks/issues).  
 All complaints will be reviewed and addressed appropriately.
 
 This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/).

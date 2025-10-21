@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+// dotenv removed - using explicit provider initialization instead
 import { wrap } from "../../src/wrap";
 
 // Wrap the text function for translation to Urdu

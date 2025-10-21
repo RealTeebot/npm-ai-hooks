@@ -1,7 +1,7 @@
 # Contributing to npm-ai-hooks
 
 👋 Thanks for your interest in contributing to **npm-ai-hooks**!  
-This project is maintained by the [RealTeebot](https://github.com/RealTeebot) organization and welcomes community involvement at all levels — from bug fixes and documentation to major feature development.
+This project is maintained by the [iTeebot](https://github.com/iTeebot) organization and welcomes community involvement at all levels — from bug fixes and documentation to major feature development.
 
 ---
 
@@ -84,5 +84,5 @@ Pull Requests: Always create a PR to the main branch
 
 🙏 Credits
 
-Maintained with ❤️ by RealTeebot
+Maintained with ❤️ by iTeebot
  and contributors.
